@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order_item")
-public class OrdemItem {
+public class OrderItem {
 
     @EmbeddedId
     private OrderItemPK id = new OrderItemPK();
@@ -14,10 +14,10 @@ public class OrdemItem {
     private Integer quantity;
     private Double price;
 
-    public OrdemItem() {
+    public OrderItem() {
     }
 
-    public OrdemItem(Order order, Product product, Integer quantity, Double price) {
+    public OrderItem(Order order, Product product, Integer quantity, Double price) {
         id.setOrder(order);
         id.setProduct(product);
         this.quantity = quantity;

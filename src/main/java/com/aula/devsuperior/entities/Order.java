@@ -2,7 +2,7 @@ package com.aula.devsuperior.entities;
 
 import java.time.Instant;
 import java.util.HashSet;
-
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -37,7 +37,7 @@ public class Order {
     private Payment payment;
 
     @OneToMany(mappedBy = "id.order")
-    private Set<OrdemItem> items = new HashSet<>();
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order() {
     }
@@ -80,6 +80,15 @@ public class Order {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+
+    public Set<OrderItem> getItems() {
+        return this.items;
+    }
+
+    public List<Product> geProducts() {
+        return items.stream().map(x -> x.getProduct()).toList();
     }
 
 }
