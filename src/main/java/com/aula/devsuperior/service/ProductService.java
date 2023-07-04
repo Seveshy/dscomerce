@@ -32,7 +32,7 @@ public class ProductService {
         return prodList.stream().map(product -> new ProductDto(product)).toList();
     }
 
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Page<ProductDto> findAllPage(Pageable pageable) {
         Page<Product> prodList = productRepository.findAll(pageable);
         return prodList.map(product -> new ProductDto(product));
@@ -41,12 +41,24 @@ public class ProductService {
     @Transactional
     public ProductDto insert(ProductDto productDto) {
         Product product = new Product();
+        copyDtoToProduct(productDto, product);
+
+        product = productRepository.save(product);
+        return new ProductDto(product);
+    }
+
+    @Transactional
+    public ProductDto update(Long id, ProductDto productDto) {
+        Product product = productRepository.getReferenceById(id);
+        copyDtoToProduct(productDto, product);
+        product = productRepository.save(product);
+        return new ProductDto(product);
+    }
+
+    private void copyDtoToProduct(ProductDto productDto, Product product) {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImgUrl(productDto.getImgUrl());
-        
-        product = productRepository.save(product);
-        return new ProductDto(product);
     }
 }
