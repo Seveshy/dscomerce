@@ -1,4 +1,4 @@
-package com.aula.devsuperior.service;
+package com.aula.devsuperior.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aula.devsuperior.dto.ProductDto;
 import com.aula.devsuperior.entities.Product;
+import com.aula.devsuperior.execptions.ResourceNotfoundException;
 import com.aula.devsuperior.repositories.ProductRepository;
 
 @Service
@@ -22,7 +23,7 @@ public class ProductService {
     // Somente leitura
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotfoundException("Recurso nao encontrado"));
         return new ProductDto(product);
     }
 
@@ -59,7 +60,6 @@ public class ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
-
 
     private void copyDtoToProduct(ProductDto productDto, Product product) {
         product.setName(productDto.getName());
