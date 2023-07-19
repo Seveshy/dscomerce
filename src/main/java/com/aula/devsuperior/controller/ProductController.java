@@ -20,6 +20,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.aula.devsuperior.dto.ProductDto;
 import com.aula.devsuperior.services.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/products")
 public class ProductController {
@@ -46,7 +48,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> insert(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> insert(@Valid @RequestBody ProductDto productDto) {
         productDto = productService.insert(productDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDto.getId())
                 .toUri();
@@ -54,7 +56,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDto> update(@PathVariable Long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> update(@PathVariable Long id, @Valid @RequestBody ProductDto productDto) {
         productDto = productService.update(id, productDto);
         return ResponseEntity.ok(productDto);
     }
