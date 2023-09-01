@@ -23,65 +23,65 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ProductService {
 
-    @Autowired
-    ProductRepository productRepository;
+	@Autowired
+	ProductRepository productRepository;
 
-    // Somente leitura
-    @Transactional(readOnly = true)
-    public ProductDto findById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotfoundException("Recurso nao encontrado"));
-        return new ProductDto(product);
-    }
+	// Somente leitura
+	@Transactional(readOnly = true)
+	public ProductDto findById(Long id) {
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotfoundException("Recurso nao encontrado"));
+		return new ProductDto(product);
+	}
 
-    @Transactional(readOnly = true)
-    public List<ProductDto> findAll() {
-        List<Product> prodList = productRepository.findAll();
-        return prodList.stream().map(product -> new ProductDto(product)).toList();
-    }
+	@Transactional(readOnly = true)
+	public List<ProductDto> findAll() {
+		List<Product> prodList = productRepository.findAll();
+		return prodList.stream().map(product -> new ProductDto(product)).toList();
+	}
 
-    @Transactional(readOnly = true)
-    public Page<ProductDto> findAllPage(Pageable pageable) {
-        Page<Product> prodList = productRepository.findAll(pageable);
-        return prodList.map(product -> new ProductDto(product));
-    }
+	@Transactional(readOnly = true)
+	public Page<ProductDto> findAllPage(String name, Pageable pageable) {
+		Page<Product> prodList = productRepository.searchByName(name, pageable);
+		return prodList.map(product -> new ProductDto(product));
+	}
 
-    @Transactional
-    public ProductDto insert(ProductDto productDto) {
-        Product product = new Product();
-        copyDtoToProduct(productDto, product);
+	@Transactional
+	public ProductDto insert(ProductDto productDto) {
+		Product product = new Product();
+		copyDtoToProduct(productDto, product);
 
-        product = productRepository.save(product);
-        return new ProductDto(product);
-    }
+		product = productRepository.save(product);
+		return new ProductDto(product);
+	}
 
-    @Transactional
-    public ProductDto update(Long id, ProductDto productDto) {
-        try {
-            Product product = productRepository.getReferenceById(id);
-            copyDtoToProduct(productDto, product);
-            product = productRepository.save(product);
-            return new ProductDto(product);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotfoundException("Recurso não encontrado.");
-        }
-    }
+	@Transactional
+	public ProductDto update(Long id, ProductDto productDto) {
+		try {
+			Product product = productRepository.getReferenceById(id);
+			copyDtoToProduct(productDto, product);
+			product = productRepository.save(product);
+			return new ProductDto(product);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotfoundException("Recurso não encontrado.");
+		}
+	}
 
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void delete(Long id) {
-        try {
-            productRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotfoundException("Recurso não encontrado.");
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Falha de integridade referencial.");
-        }
-    }
+	@Transactional(propagation = Propagation.SUPPORTS)
+	public void delete(Long id) {
+		try {
+			productRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotfoundException("Recurso não encontrado.");
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Falha de integridade referencial.");
+		}
+	}
 
-    private void copyDtoToProduct(ProductDto productDto, Product product) {
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setImgUrl(productDto.getImgUrl());
-    }
+	private void copyDtoToProduct(ProductDto productDto, Product product) {
+		product.setName(productDto.getName());
+		product.setDescription(productDto.getDescription());
+		product.setPrice(productDto.getPrice());
+		product.setImgUrl(productDto.getImgUrl());
+	}
 }

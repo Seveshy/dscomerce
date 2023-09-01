@@ -48,6 +48,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>7.0.1.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>com.project</groupId>
+			<artifactId>project-book</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
