@@ -1,7 +1,6 @@
 package com.aula.devsuperior.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,9 +34,9 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ProductDto> findAll() {
+	public List<Product> findAll() {
 		List<Product> prodList = productRepository.findAll();
-		return prodList.stream().map(product -> new ProductDto(product)).toList();
+		return prodList;
 	}
 
 	@Transactional(readOnly = true)
