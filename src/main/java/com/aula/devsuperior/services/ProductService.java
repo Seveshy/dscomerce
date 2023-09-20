@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aula.devsuperior.dto.ProductDto;
+import com.aula.devsuperior.dto.ProductMinDto;
 import com.aula.devsuperior.entities.Product;
 import com.aula.devsuperior.execptions.DatabaseException;
 import com.aula.devsuperior.execptions.ResourceNotfoundException;
@@ -40,9 +41,9 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ProductDto> findAllPage(String name, Pageable pageable) {
+	public Page<ProductMinDto> findAllPage(String name, Pageable pageable) {
 		Page<Product> prodList = productRepository.searchByName(name, pageable);
-		return prodList.map(product -> new ProductDto(product));
+		return prodList.map(product -> new ProductMinDto(product));
 	}
 
 	@Transactional
