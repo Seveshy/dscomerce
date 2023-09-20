@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aula.devsuperior.dto.CategoryDto;
 import com.aula.devsuperior.dto.ProductDto;
 import com.aula.devsuperior.dto.ProductMinDto;
+import com.aula.devsuperior.entities.Category;
 import com.aula.devsuperior.entities.Product;
 import com.aula.devsuperior.execptions.DatabaseException;
 import com.aula.devsuperior.execptions.ResourceNotfoundException;
@@ -83,5 +85,11 @@ public class ProductService {
 		product.setDescription(productDto.getDescription());
 		product.setPrice(productDto.getPrice());
 		product.setImgUrl(productDto.getImgUrl());
+		product.getCategories().clear();
+		for (CategoryDto categoryDto : productDto.getCategories()) {
+			Category category = new Category();
+			category.setId(categoryDto.getId());
+			product.getCategories().add(category);
+		}
 	}
 }
