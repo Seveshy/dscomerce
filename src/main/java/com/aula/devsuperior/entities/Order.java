@@ -82,13 +82,16 @@ public class Order {
         this.client = client;
     }
 
-
     public Set<OrderItem> getItems() {
         return this.items;
     }
 
     public List<Product> geProducts() {
         return items.stream().map(x -> x.getProduct()).toList();
+    }
+
+    public Payment getPayment() {
+        return this.payment;
     }
 
 }
