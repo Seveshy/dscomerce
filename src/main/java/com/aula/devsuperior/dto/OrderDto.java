@@ -8,6 +8,8 @@ import com.aula.devsuperior.entities.Order;
 import com.aula.devsuperior.entities.OrderItem;
 import com.aula.devsuperior.entities.OrderStatus;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class OrderDto {
     private Long id;
     private Instant moment;
@@ -16,6 +18,7 @@ public class OrderDto {
     private ClientDto client;
     private PaymentDto payment;
 
+    @NotEmpty(message = "Deve ter pelo menos um item")
     private List<OrderItemDto> items = new ArrayList<>();
 
     public OrderDto(Long id, Instant moment, OrderStatus status, ClientDto client, PaymentDto payment) {
@@ -30,7 +33,6 @@ public class OrderDto {
         id = entitiesOrder.getId();
         moment = entitiesOrder.getMoment();
         status = entitiesOrder.getStatus();
-        client = new ClientDto(entitiesOrder.getClient());
         payment = (entitiesOrder.getPayment() == null) ? null : new PaymentDto(entitiesOrder.getPayment());
         for (OrderItem item : entitiesOrder.getItems()) {
             OrderItemDto itemDto = new OrderItemDto(item);
